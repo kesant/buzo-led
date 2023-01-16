@@ -17,7 +17,7 @@ from micropython import const
 # NodeMCU ESP-C3-32S-Kit onboard LEDs assignment
 
 ###########################################
-button = Pin(36, Pin.IN,Pin.PULL_UP)
+button = Pin(14, Pin.IN,Pin.PULL_UP)
 pot = Pin(39, Pin.IN)
 pin_npBz = Pin(33, Pin.OUT)
 pin_npId = Pin(32, Pin.OUT)
@@ -118,7 +118,6 @@ class BLESimplePeripheral:
 "--------------------------------------------------------"
 
 def setColor():
-    global, red , green, blue
     pwm0.duty(red)
     pwm1.duty(green)
     pwm2.duty(blue)
@@ -176,7 +175,26 @@ def rainbow(flag):
 
 def setear_modo():
     global modo
-    """modo += 1
+    if not button.value():
+        #init = default_timer()
+        #while (init - default_timer() < 3000) && not button.value():
+        time.sleep_ms(20)
+        if not button.value():
+            if modo==1:
+                modo=0
+            else:
+                modo=1
+            while not button.value():
+                time.sleep_ms(20)
+    """if not button.value():
+        while not button.value()
+        if modo==1:
+            modo=0
+        else:
+            modo=1
+        time.sleep_ms(20)
+        
+    modo += 1
     match modo:
         case 1:
             modo = 1
@@ -185,39 +203,24 @@ def setear_modo():
     print('Modo:',modo)
     if modo > n_modos:
         mod=1"""
-    if modo==1:
-        modo=0
-    else:
-        modo=1
-def modo_boton:
-    if not button.value():
-        #init = default_timer()
-        #while (init - default_timer() < 3000) && not button.value():
-        time.sleep_ms(20)
-        if not button.value():
-            setear_modo()
-            while not button.value():
-                time.sleep_ms(20)    
 
 def demo():
     ble = bluetooth.BLE()
     p = BLESimplePeripheral(ble)
-    modo_boton()
+
     def on_rx(v):
         # command received from central,
         # and send back the command to centrol.
         print("RX", v)
         valor_sensor=int(v.decode())
         print(valor_sensor)
+        setear_modo()
         p.send(str(modo))
         rainbow(valor_sensor)
 
     p.on_write(on_rx)
-       
+        
     while True:  
-
-
-              
         time.sleep_ms(100)
 
 

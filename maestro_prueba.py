@@ -232,7 +232,7 @@ class BLESimpleCentral:
         self._notify_callback = callback
     
 def demo():
-    global modo
+    
     ble = bluetooth.BLE()
     central = BLESimpleCentral(ble)
 
@@ -321,7 +321,6 @@ def demo():
     time.sleep_ms(50)
     
 if __name__ == "__main__":
-    
     while True:
         if modo==0:
             demo()
