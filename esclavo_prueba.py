@@ -18,7 +18,11 @@ from micropython import const
 
 ###########################################
 button = Pin(14, Pin.IN,Pin.PULL_UP)
-pot = Pin(39, Pin.IN)
+
+pot =ADC(PIN(39))
+pot.atten(ADC.ATTN_11DB)
+pot.width(ADC.WIDTH_12BIT)
+
 pin_npBz = Pin(33, Pin.OUT)
 pin_npId = Pin(32, Pin.OUT)
 npBz = neopixel.NeoPixel(pin_npBz, 20)
@@ -117,10 +121,10 @@ class BLESimplePeripheral:
 
 "--------------------------------------------------------"
 
-def setColor():
-    pwm0.duty(red)
-    pwm1.duty(green)
-    pwm2.duty(blue)
+def setColor(r,g,b):
+    pwm0.duty(r)
+    pwm1.duty(g)
+    pwm2.duty(b)
 
 def wheelRGB(pos):
     global red,green,blue
@@ -161,6 +165,7 @@ def wheelNeo(pos):
         blue=(255-WheelPos*3)
         
 def rainbow(flag):
+    global brightness
     longitud = int(flag//4.3)
     npBz = neopixel.NeoPixel(pin_npBz, longitud)
     for j in range(0,longitud):
@@ -173,6 +178,20 @@ def rainbow(flag):
         npBz[x] = (0,0,0)
         npBz.write()
 
+def rgb_leds(valor):
+    #setea un color a los rgb dependiendo de
+    global brightness
+    wheelNeo(valor)
+    setColor(int(red*brightness),int(green*brightness),int(blue*brightness))
+    time.sleep_ms(15)
+    
+def pot_rgb(valor_pot) :
+    global brightness
+    dac = valor_pot //16
+    wheelNeo(dac)
+    setColor(int(red*brightness),int(green*brightness),int(blue*brightness))
+    time.sleep_ms(15)
+    
 def setear_modo():
     global modo
     if not button.value():
@@ -217,7 +236,9 @@ def demo():
         setear_modo()
         p.send(str(modo))
         rainbow(valor_sensor)
+        rgb_leds(valor_sensor)
 
+        
     p.on_write(on_rx)
         
     while True:  

@@ -304,7 +304,8 @@ def demo():
             dacVal=int(255-((255/2195)*(4095-adcVal)))
             voltage = adcVal / 4095.0 * 3.3
             #dac.write(dacVal)
-            print("ADC Val:",adcVal,"DACVal:",dacVal,"Voltage:",voltage,"V")
+            print("ADC Val:",adcVal,"DACVal:",
+                  ,"Voltage:",voltage,"V")
             send_CMD(str(dacVal))     
             
             #if voltage==3.3:
