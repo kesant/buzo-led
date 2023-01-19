@@ -10,7 +10,7 @@ import struct
 import time
 import neopixel
 from ble_advertising import advertising_payload
-from machine import Pin, PWM
+from machine import ADC,Pin, PWM
 #from timeit import default_timer
 
 from micropython import const
@@ -19,7 +19,7 @@ from micropython import const
 ###########################################
 button = Pin(14, Pin.IN,Pin.PULL_UP)
 
-pot =ADC(PIN(39))
+pot =ADC(Pin(39))
 pot.atten(ADC.ATTN_11DB)
 pot.width(ADC.WIDTH_12BIT)
 
@@ -122,6 +122,7 @@ class BLESimplePeripheral:
 "--------------------------------------------------------"
 
 def setColor(r,g,b):
+    
     pwm0.duty(r)
     pwm1.duty(g)
     pwm2.duty(b)
